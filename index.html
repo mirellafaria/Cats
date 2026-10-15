@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel | Casinha de Patas</title>
+    <!-- Importando a fonte Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6b46c1;
+            --primary-dark: #553c9a;
+            --primary-light: #9f7aea;
+            --primary-bg: #faf5ff;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --white: #ffffff;
+            --danger: #ff5252;
+            --danger-hover: #ff1744;
+            --success: #2ec4b6;
+            --success-hover: #20988d;
+            --warning: #ff9f1c;
+            --warning-bg: #fffbf0;
+            --warning-border: #ffe066;
+            --warning-hover: #f77f00;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f6fc;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' width='40' height='40'%3E%3Cg fill='%236b46c1' fill-opacity='0.03'%3E%3Cpath d='M20 22c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm-6-4c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm12 0c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm-9-5c-.8 0-1.5-.7-1.5-1.5S13.2 10 14 10s1.5.7 1.5 1.5S14.8 13 14 13zm6 0c-.8 0-1.5-.7-1.5-1.5S19.2 10 20 10s1.5.7 1.5 1.5S20.8 13 20 13zm-3 13c-2.8 0-5-2.2-5-5 0-1.8 1-3.4 2.5-4.2 1-.5 2.2-.8 3.5-.8s2.5.3 3.5.8c1.5.8 2.5 2.4 2.5 4.2 0 2.8-2.2 5-5 5z'/%3E%3C/g%3E%3C/svg%3E");
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        aside {
+            width: 330px;
+            background: var(--white);
+            border-right: 1px solid #edf2f7;
+            padding: 30px 25px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            box-shadow: 4px 0 20px rgba(107, 70, 193, 0.04);
+            z-index: 10;
+        }
+
+        main {
+            flex: 1;
+            padding: 35px;
+            box-sizing: border-box;
+            max-width: 1150px;
+            margin: 0 auto;
+        }
+
+        .brand-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--primary-bg);
+            padding-bottom: 20px;
+        }
+
+        .brand-logo-icon {
+            width: 52px;
+            height: 52px;
+            fill: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .brand-header h1 {
+            color: var(--primary);
+            font-size: 22px;
+            margin: 0;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-size: 26px;
+            margin-bottom: 22px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-left: 5px solid var(--primary);
+            padding-left: 12px;
+            line-height: 1.2;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 22px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04);
+            margin-bottom: 20px;
+            border: 1px solid #f1f0f5;
+        }
+
+        .dashboard-top {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            align-items: center; 
+        }
+
+        .stats-container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 20px 15px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid #f0eafc;
+            box-shadow: 0 8px 20px rgba(107, 70, 193, 0.03);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-number {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+        }
+
+        .lembretes-card {
+            background-color: var(--warning-bg);
+            border: 1px solid var(--warning-border);
+            padding: 20px;
+            border-radius: 16px;
+            width: 320px; 
+            box-sizing: border-box;
+            display: none; 
+            box-shadow: 0 8px 20px rgba(255, 159, 28, 0.06);
+            flex-shrink: 0;
+        }
+
+        .lembretes-titulo {
+            margin: 0 0 15px 0;
+            color: var(--warning-hover);
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-bottom: 1px dashed var(--warning-border);
+            padding-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .lista-lembretes {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            color: var(--text-main);
+        }
+
+        .lembrete-grupo {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .lembrete-grupo:last-child {
+            margin-bottom: 0;
+        }
+
+        .lembrete-header {
+            font-size: 12px;
+            margin-bottom: 8px;
+            color: var(--text-main);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .lembrete-tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .gato-tag {
+            background-color: var(--white);
+            border: 1px solid var(--warning-border);
+            color: var(--primary-dark);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .gato-tag:hover {
+            background-color: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .form-group { margin-bottom: 18px; }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 12px;
+            color: #4a5568;
+            letter-spacing: 0.3px;
+        }
+
+        input[type="text"], input[type="date"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            box-sizing: border-box;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            background-color: #faf9fc;
+            transition: all 0.2s;
+        }
+
+        input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: var(--white);
+            box-shadow: 0 0 0 4px rgba(107, 70, 193, 0.1);
+        }
+
+        input[type="file"] {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        textarea { resize: vertical; height: 80px; }
+
+        button {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            width: 100%;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(107, 70, 193, 0.2);
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(107, 70, 193, 0.3);
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            background: var(--white);
+            padding: 18px 22px;
+            border-radius: 16px;
+            border: 1px solid #f1f0f5;
+            align-items: center;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .search-wrapper { flex: 2; }
+        .sort-wrapper { flex: 1; }
+
+        .filters-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .status-buttons-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background-color: var(--white);
+            color: var(--text-muted);
+            border: 1.5px solid #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            width: auto;
+            transition: all 0.2s;
+            box-shadow: none;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary-light);
+            color: var(--primary);
+            background-color: var(--primary-bg);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(107, 70, 193, 0.25);
+        }
+
+        .faixa-etaria-select {
+            background-color: var(--primary);
+            color: var(--white);
+            border: 1.5px solid var(--primary-dark);
+            padding: 9px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            width: auto;
+            transition: background-color 0.2s;
+            box-shadow: 0 4px 12px rgba(107, 70, 193, 0.2);
+        }
+
+        .faixa-etaria-select:hover, .faixa-etaria-select:focus {
+            background-color: var(--primary-dark);
+        }
+
+        .faixa-etaria-select option {
+            background-color: var(--white);
+            color: var(--text-main);
+        }
+
+        .gatos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 22px;
+        }
+
+        .gato-card {
+            background: var(--white);
+            border-radius: 20px;
+            border: 1px solid #f0f0f5;
+            padding: 22px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .gato-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(107, 70, 193, 0.08);
+            border-color: #e2d9fc;
+        }
+
+        .gato-conteudo { display: flex; gap: 16px; align-items: flex-start; }
+
+        .gato-foto {
+            width: 105px;
+            height: 105px;
+            object-fit: cover;
+            border-radius: 16px;
+            border: 2px solid #f0eafc;
+            background-color: #f8f6fc;
+            flex-shrink: 0;
+        }
+
+        .gato-foto-placeholder {
+            width: 105px;
+            height: 105px;
+            border-radius: 16px;
+            background-color: #f8f6fc;
+            border: 2px solid #f0eafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: var(--text-muted);
+            text-align: center;
+            flex-shrink: 0;
+            font-weight: 500;
+        }
+
+        .gato-info { flex: 1; }
+        .gato-info h3 { margin: 0 0 6px 0; color: var(--text-main); font-size: 18px; font-weight: 700; }
+        .gato-info p { margin: 3px 0; font-size: 12px; color: var(--text-muted); }
+        .gato-info p strong { color: var(--text-main); font-weight: 600; }
+
+        .obs-badge {
+            margin-top: 12px;
+            font-size: 11px;
+            background-color: var(--primary-bg);
+            color: var(--primary-dark);
+            padding: 10px 12px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            font-weight: 500;
+        }
+
+        .botoes-card {
+            display: flex;
+            gap: 8px;
+            margin-top: 18px;
+            padding-top: 15px;
+            border-top: 1.5px solid #f7f6fb;
+        }
+
+        .btn-acao { 
+            padding: 7px 10px; 
+            font-size: 12px; 
+            border-radius: 10px; 
+            width: auto; 
+            flex: 1; 
+            font-weight: 600;
+            box-shadow: none;
+        }
+        .btn-acao:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+
+        .btn-editar { background-color: var(--warning); color: #fff; }
+        .btn-editar:hover { background-color: var(--warning-hover); }
+        .btn-saude { background-color: var(--success); color: #fff; }
+        .btn-saude:hover { background-color: var(--success-hover); }
+        .btn-excluir { background-color: var(--danger); color: #fff; }
+        .btn-excluir:hover { background-color: var(--danger-hover); }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(45, 55, 72, 0.5);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 520px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .checkbox-group { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; font-size: 13px; font-weight: 500; }
+        .checkbox-group input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--primary); border-radius: 6px; cursor: pointer; }
+        .datas-vermifugo { display: flex; gap: 12px; flex: 1; }
+        .datas-vermifugo div { flex: 1; }
+        .datas-vermifugo label { font-size: 10px; color: var(--text-muted); margin-bottom: 3px; text-transform: uppercase; font-weight: 700; }
+        .datas-vermifugo input { padding: 8px; font-size: 12px; border-radius: 10px; }
+
+        /* Estilos da Secção de Gastos */
+        .secao-gastos {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1.5px dashed #e2e8f0;
+        }
+        .lista-gastos-modal {
+            max-height: 140px;
+            overflow-y: auto;
+            margin-bottom: 12px;
+            list-style: none;
+            padding: 0;
+        }
+        .gasto-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f6fc;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+        .gasto-total-box {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 13px;
+            background: var(--primary-bg);
+            color: var(--primary-dark);
+            padding: 10px 14px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            aside { width: 100%; height: auto; position: relative; z-index: 1; }
+            .dashboard-top { flex-direction: column; align-items: stretch; }
+            .lembretes-card { width: 100%; }
+            .stats-container { grid-template-columns: repeat(2, 1fr); width: 100%; }
+            .toolbar { flex-direction: column; }
+            .filters-container { flex-direction: column; align-items: stretch; }
+            .faixa-etaria-select { width: 100%; }
+            .checkbox-group { flex-direction: column; align-items: flex-start; }
+            .datas-vermifugo { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div class="brand-header">
+            <svg class="brand-logo-icon" viewBox="0 0 24 24">
+                <path d="M12,3C10.5,3 9.3,4.2 9.3,5.7C9.3,7.2 10.5,8.3 12,8.3C13.5,8.3 14.7,7.2 14.7,5.7C14.7,4.2 13.5,3 12,3M6,5C4.3,5 3,6.3 3,8C3,9.7 4.3,11 6,11C7.7,11 9,9.7 9,8C9,6.3 7.7,5 6,5M18,5C16.3,5 15,6.3 15,8C15,9.7 16.3,11 18,11C19.7,11 21,9.7 21,8C21,6.3 19.7,5 18,5M4.5,13C3.1,13 2,14.1 2,15.5C2,16.9 3.1,18 4.5,18C5.9,18 7,16.9 7,15.5C7,14.1 5.9,13 4.5,13M19.5,13C18.1,13 17,14.1 17,15.5C17,16.9 18.1,18 19.5,18C20.9,18 22,16.9 22,15.5C22,14.1 20.9,13 19.5,13M12,10C9.2,10 6.9,11.8 6,14.3C7.4,15.8 8.6,18.4 9,20.5H15C15.4,18.4 16.6,15.8 18,14.3C17.1,11.8 14.8,10 12,10Z"/>
+            </svg>
+            <h1>Casinha de Patas</h1>
+        </div>
+
+        <div class="card" style="padding: 20px; margin-bottom: 0;">
+            <h2 id="titulo-form" style="font-size: 16px; margin-bottom: 18px; color: var(--primary); font-weight: 700;">Cadastrar Novo Gatinho</h2>
+            <form id="form-gato">
+                <input type="hidden" id="gato-id">
+                
+                <div class="form-group">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="idade">Idade Aproximada:</label>
+                    <input type="text" id="idade" placeholder="Ex: 5 meses, 2 anos..." required>
+                </div>
+                <div class="form-group">
+                    <label for="pelagem">Pelagem:</label>
+                    <input type="text" id="pelagem" required>
+                </div>
+                <div class="form-group">
+                    <label for="sexo">Sexo:</label>
+                    <select id="sexo">
+                        <option value="Macho">Macho</option>
+                        <option value="Fêmea">Fêmea</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="status">Status:</label>
+                    <select id="status">
+                        <option value="Disponível">Disponível</option>
+                        <option value="Em Tratamento">Em Tratamento</option>
+                        <option value="Reservado">Reservado</option>
+                        <option value="Adotado">Adotado</option>
+                        <option value="Falecido">Falecido</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="foto">Foto:</label>
+                    <input type="file" id="foto" accept="image/*">
+                </div>
+                <button type="submit" id="btn-salvar">Salvar Gatinho</button>
+            </form>
+        </div>
+    </aside>
+
+    <main>
+        <h2 class="section-title">Gestão dos Gatos</h2>
+
+        <div class="dashboard-top">
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number" id="contador-total">0</div>
+                    <div class="stat-label">Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="contador-disponivel">0</div>
+                    <div class="stat-label">Disponíveis</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="contador-tratamento">0</div>
+                    <div class="stat-label">Em Tratamento</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="contador-reservado">0</div>
+                    <div class="stat-label">Reservados</div>
+                </div>
+            </div>
+
+            <div id="lembretes-card" class="lembretes-card">
+                <h3 class="lembretes-titulo">Lembretes Médicos</h3>
+                <ul id="lista-lembretes" class="lista-lembretes">
+                    <!-- Preenchido dinamicamente pelo JavaScript -->
+                </ul>
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <div class="search-wrapper">
+                <label for="input-busca">Pesquisar:</label>
+                <input type="text" id="input-busca" placeholder="Digite o nome do gato..." oninput="processarFiltrosEExibicao()">
+            </div>
+            <div class="sort-wrapper">
+                <label for="select-ordenar">Ordenar por:</label>
+                <select id="select-ordenar" onchange="processarFiltrosEExibicao()">
+                    <option value="nome-asc">Nome (A - Z)</option>
+                    <option value="nome-desc">Nome (Z - A)</option>
+                    <option value="idade">Idade</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="filters-container">
+            <div class="status-buttons-group">
+                <button class="filter-btn active" onclick="filtrarGatos('Todos', this)">Todos</button>
+                <button class="filter-btn" onclick="filtrarGatos('Disponível', this)">Disponíveis</button>
+                <button class="filter-btn" onclick="filtrarGatos('Em Tratamento', this)">Em Tratamento</button>
+                <button class="filter-btn" onclick="filtrarGatos('Reservado', this)">Reservados</button>
+                <button class="filter-btn" onclick="filtrarGatos('Adotado', this)">Adotados</button>
+                <button class="filter-btn" onclick="filtrarGatos('Falecido', this)">Falecidos</button>
+            </div>
+            
+            <select id="select-faixa-etaria" class="faixa-etaria-select" onchange="filtrarPorFaixaEtariaDropdown(this)">
+                <option value="Todos">Faixa Etária</option>
+                <option value="Filhote">Filhote (até 1 ano)</option>
+                <option value="Adulto">Adulto (1 a 7 anos)</option>
+                <option value="Idoso">Idoso (mais de 7 anos)</option>
+            </select>
+        </div>
+
+        <div id="lista-gatos" class="gatos-grid">
+            <p>Carregando gatinhos...</p>
+        </div>
+    </main>
+
+    <!-- Modal Prontuário com Saúde e Gastos -->
+    <div id="modal-saude" class="modal">
+        <div class="modal-content">
+            <h2 style="font-size: 18px; color: var(--primary); margin-top: 0; font-weight: 700;">Prontuário Médico & Financeiro</h2>
+            <p id="nome-gato-modal" style="font-weight: 600; color: var(--text-main); margin-bottom: 20px; font-size: 13px;"></p>
+            
+            <div class="form-group">
+                <label for="saude-fiv-felv">Teste FIV / FeLV:</label>
+                <select id="saude-fiv-felv">
+                    <option value="Não testado">Não testado</option>
+                    <option value="Negativo">Negativo (FIV e FeLV)</option>
+                    <option value="Positivo FIV">Positivo para FIV</option>
+                    <option value="Positivo FeLV">Positivo para FeLV</option>
+                    <option value="Positivo FIV e FeLV">Positivo para FIV e FeLV</option>
+                </select>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="saude-castrado">
+                <label for="saude-castrado" style="margin-bottom:0; font-weight: 600; cursor: pointer;">Castrado(a)</label>
+            </div>
+
+            <div class="checkbox-group" style="flex-wrap: wrap; gap: 15px;">
+                <div style="display: flex; align-items: center; gap: 12px; width: 140px;">
+                    <input type="checkbox" id="saude-vermifugado">
+                    <label for="saude-vermifugado" style="margin-bottom:0; font-weight: 600; cursor: pointer;">Vermifugado(a)</label>
+                </div>
+                <div class="datas-vermifugo">
+                    <div>
+                        <label>1ª Dose</label>
+                        <input type="date" id="saude-data-vermifugo-1" onchange="calcularSegundaDose()">
+                    </div>
+                    <div>
+                        <label>2ª Dose (+15 dias)</label>
+                        <input type="date" id="saude-data-vermifugo-2">
+                    </div>
+                </div>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="saude-despulgado">
+                <label for="saude-despulgado" style="margin-bottom:0; font-weight: 600; cursor: pointer;">Despulgado(a)</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="saude-vacinado">
+                <label for="saude-vacinado" style="margin-bottom:0; font-weight: 600; cursor: pointer;">Vacinado(a)</label>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label for="saude-obs">Observações Médicas:</label>
+                <textarea id="saude-obs" placeholder="Ex: Alergia a frango, remédio às terças..."></textarea>
+            </div>
+
+            <!-- Secção de Controlo de Gastos -->
+            <div class="secao-gastos">
+                <h3 style="font-size: 14px; color: var(--primary); margin-bottom: 12px; font-weight: 700;">Gestão de Gastos (Consultas, Exames, etc.)</h3>
+                
+                <ul id="lista-gastos-modal" class="lista-gastos-modal">
+                    <!-- Preenchido via JavaScript -->
+                </ul>
+
+                <div class="gato-total-box">
+                    <span>Total Gasto:</span>
+                    <span id="valor-total-gatos">R$ 0,00</span>
+                </div>
+
+                <div style="display: flex; gap: 8px; margin-top: 12px;">
+                    <input type="text" id="novo-gasto-desc" placeholder="Descrição (ex: Consulta, Castração)" style="flex: 2;">
+                    <input type="number" id="novo-gasto-valor" placeholder="Valor (R$)" step="0.01" style="flex: 1;">
+                    <button type="button" onclick="adicionarGasto()" style="width: auto; padding: 10px 15px; font-size: 12px;">Adicionar</button>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button type="button" onclick="salvarSaude()" style="background-color: var(--success);">Salvar Prontuário</button>
+                <button type="button" onclick="fecharModalSaude()" style="background-color: #a0aec0; box-shadow: none;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let statusAtualFiltro = 'Todos';
+        let faixaEtariaAtualFiltro = 'Todos';
+        let listaGatosCache = [];
+        let gatoEmEdicaoSaude = '';
+
+        const formatarDataBR = (dataString) => {
+            if (!dataString) return '';
+            const [ano, mes, dia] = dataString.split('-');
+            return `${dia}/${mes}/${ano}`;
+        };
+
+        function calcularSegundaDose() {
+            const dataPrimeiraDose = document.getElementById('saude-data-vermifugo-1').value;
+            if (dataPrimeiraDose) {
+                const dataObj = new Date(dataPrimeiraDose + 'T12:00:00');
+                dataObj.setDate(dataObj.getDate() + 15);
+                
+                const ano = dataObj.getFullYear();
+                const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
+                const dia = String(dataObj.getDate()).padStart(2, '0');
+                
+                document.getElementById('saude-data-vermifugo-2').value = `${ano}-${mes}-${dia}`;
+            } else {
+                document.getElementById('saude-data-vermifugo-2').value = '';
+            }
+        }
+
+        function focarGato(nome) {
+            const idLimpo = 'card-gato-' + nome.replace(/\s+/g, '-');
+            let card = document.getElementById(idLimpo);
+
+            if (!card) {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.filter-btn')[0].classList.add('active');
+                statusAtualFiltro = 'Todos';
+                
+                document.getElementById('select-faixa-etaria').value = 'Todos';
+                faixaEtariaAtualFiltro = 'Todos';
+                
+                document.getElementById('input-busca').value = '';
+                
+                processarFiltrosEExibicao();
+                card = document.getElementById(idLimpo);
+            }
+
+            if (card) {
+                setTimeout(() => {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    card.style.transform = 'scale(1.03)';
+                    card.style.borderColor = 'var(--primary)';
+                    card.style.boxShadow = '0 0 0 4px rgba(107, 70, 193, 0.2)';
+                    
+                    setTimeout(() => {
+                        card.style.transform = 'none';
+                        card.style.borderColor = '#f0f0f5';
+                        card.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.03)';
+                    }, 2000);
+                }, 100);
+            }
+        }
+
+        function atualizarLembretes(gatos) {
+            const container = document.getElementById('lembretes-card');
+            const lista = document.getElementById('lista-lembretes');
+            lista.innerHTML = '';
+
+            const hoje = new Date();
+            hoje.setHours(0,0,0,0);
+            
+            const gruposPorData = {};
+            let temLembrete = false;
+
+            const gatosValidos = gatos.filter(g => g.data_vermifugo_2 && g.status !== 'Adotado' && g.status !== 'Falecido');
+            gatosValidos.sort((a, b) => new Date(a.data_vermifugo_2) - new Date(b.data_vermifugo_2));
+
+            gatosValidos.forEach(gato => {
+                const dataDose = new Date(gato.data_vermifugo_2 + 'T12:00:00');
+                dataDose.setHours(0,0,0,0);
+                
+                const diffTime = dataDose - hoje;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays >= -10 && diffDays <= 15) {
+                    temLembrete = true;
+                    
+                    const dataFormatada = formatarDataBR(gato.data_vermifugo_2);
+                    let statusTexto = '';
+                    
+                    if (diffDays === 0) {
+                        statusTexto = '<span style="color: var(--danger); font-weight: bold;">(HOJE)</span>';
+                    } else if (diffDays < 0) {
+                        statusTexto = `<span style="color: var(--danger); font-weight: bold;">(Atrasado ${Math.abs(diffDays)} dias)</span>`;
+                    } else {
+                        statusTexto = `<span style="color: var(--text-muted); font-weight: normal;">(em ${diffDays} dias)</span>`;
+                    }
+
+                    const chaveGrupo = `${dataFormatada} ${statusTexto}`;
+                    
+                    if (!gruposPorData[chaveGrupo]) {
+                        gruposPorData[chaveGrupo] = [];
+                    }
+                    gruposPorData[chaveGrupo].push(gato);
+                }
+            });
+
+            for (const [chaveData, gatosDoGrupo] of Object.entries(gruposPorData)) {
+                const liGrupo = document.createElement('li');
+                liGrupo.className = 'lembrete-grupo';
+                
+                const [dataPura, spanStatus] = chaveData.split(' <span');
+                
+                const titulo = document.createElement('div');
+                titulo.className = 'lembrete-header';
+                titulo.innerHTML = `<strong>2ª Dose do Vermífugo - ${dataPura}</strong> <span ${spanStatus ? '<span' + spanStatus : ''}`;
+                
+                const containerTags = document.createElement('div');
+                containerTags.className = 'lembrete-tags-container';
+
+                gatosDoGrupo.forEach(gato => {
+                    const tag = document.createElement('span');
+                    tag.className = 'gato-tag';
+                    tag.innerText = gato.nome;
+                    tag.onclick = () => focarGato(gato.nome);
+                    containerTags.appendChild(tag);
+                });
+
+                liGrupo.appendChild(titulo);
+                liGrupo.appendChild(containerTags);
+                lista.appendChild(liGrupo);
+            }
+
+            container.style.display = temLembrete ? 'block' : 'none';
+        }
+
+        function classificarFaixaEtaria(textoIdade) {
+            if (!textoIdade) return 'Adulto';
+            const texto = textoIdade.toLowerCase();
+            const numeros = texto.match(/\d+/g);
+            if (!numeros) return 'Adulto';
+            const valor = parseInt(numeros[0], 10);
+
+            if (texto.includes('mes') || texto.includes('mês') || texto.includes('meses')) {
+                return valor <= 12 ? 'Filhote' : 'Adulto';
+            }
+            if (texto.includes('ano') || texto.includes('anos')) {
+                if (valor < 1) return 'Filhote';
+                if (valor >= 1 && valor <= 7) return 'Adulto';
+                if (valor > 7) return 'Idoso';
+            }
+            if (valor <= 12 && (texto.includes('m') || !texto.includes('a'))) {
+                return valor <= 12 ? 'Filhote' : 'Adulto';
+            }
+            return valor <= 7 ? 'Adulto' : 'Idoso';
+        }
+
+        async function carregarGatos() {
+            try {
+                const resposta = await fetch('http://localhost:3000/gatos');
+                const todosGatos = await resposta.json();
+                
+                listaGatosCache = todosGatos;
+                atualizarContadores(todosGatos);
+                atualizarLembretes(todosGatos);
+                processarFiltrosEExibicao();
+            } catch (erro) {
+                console.error("Erro ao buscar gatos:", erro);
+                document.getElementById('lista-gatos').innerHTML = '<p style="color: red; grid-column: 1/-1;">Erro ao carregar os gatinhos. O servidor está ligado?</p>';
+            }
+        }
+
+        function processarFiltrosEExibicao() {
+            let gatosProcessados = [...listaGatosCache];
+
+            if (statusAtualFiltro !== 'Todos') {
+                gatosProcessados = gatosProcessados.filter(g => g.status === statusAtualFiltro);
+            }
+
+            if (faixaEtariaAtualFiltro !== 'Todos') {
+                gatosProcessados = gatosProcessados.filter(g => classificarFaixaEtaria(g.idade_aproximada) === faixaEtariaAtualFiltro);
+            }
+
+            const termoBusca = document.getElementById('input-busca').value.toLowerCase().trim();
+            if (termoBusca !== '') {
+                gatosProcessados = gatosProcessados.filter(g => g.nome.toLowerCase().includes(termoBusca));
+            }
+
+            const criterioOrdenacao = document.getElementById('select-ordenar').value;
+            gatosProcessados.sort((a, b) => {
+                if (criterioOrdenacao === 'nome-asc') {
+                    return a.nome.localeCompare(b.nome);
+                } else if (criterioOrdenacao === 'nome-desc') {
+                    return b.nome.localeCompare(a.nome);
+                } else if (criterioOrdenacao === 'idade') {
+                    return a.idade_aproximada.localeCompare(b.idade_aproximada, 'pt', { numeric: true });
+                }
+            });
+
+            renderizarGatos(gatosProcessados);
+        }
+
+        function renderizarGatos(gatos) {
+            const container = document.getElementById('lista-gatos');
+            container.innerHTML = '';
+
+            if (gatos.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 30px;">Nenhum gatinho encontrado.</p>';
+                return;
+            }
+
+            gatos.forEach(gato => {
+                const card = document.createElement('div');
+                card.className = 'gato-card';
+                card.id = 'card-gato-' + gato.nome.replace(/\s+/g, '-');
+                
+                const imagemHtml = gato.foto 
+                    ? `<img src="${gato.foto}" alt="Foto de ${gato.nome}" class="gato-foto">` 
+                    : `<div class="gato-foto-placeholder">Sem foto</div>`;
+
+                const obsHtml = gato.observacoes_medicas 
+                    ? `<div class="obs-badge"><strong>Obs:</strong> ${gato.observacoes_medicas}</div>` 
+                    : '';
+
+                card.innerHTML = `
+                    <div class="gato-conteudo">
+                        ${imagemHtml}
+                        <div class="gato-info">
+                            <h3>${gato.nome}</h3>
+                            <p><strong>Idade:</strong> ${gato.idade_aproximada}</p>
+                            <p><strong>Pelagem:</strong> ${gato.pelagem}</p>
+                            <p><strong>Sexo:</strong> ${gato.sexo}</p>
+                            <p><strong>Status:</strong> ${gato.status}</p>
+                        </div>
+                    </div>
+                    ${obsHtml}
+                    <div class="botoes-card">
+                        <button class="btn-acao btn-editar" onclick="prepararEdicao('${gato.nome}')">Editar</button>
+                        <button class="btn-acao btn-saude" onclick="abrirModalSaude('${gato.nome}')">Saúde</button>
+                        <button class="btn-acao btn-excluir" onclick="excluirGato('${gato.nome}')">Excluir</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function atualizarContadores(gatos) {
+            const total = gatos.length;
+            const disponiveis = gatos.filter(g => g.status === 'Disponível').length;
+            const emTratamento = gatos.filter(g => g.status === 'Em Tratamento').length;
+            const reservados = gatos.filter(g => g.status === 'Reservado').length;
+
+            document.getElementById('contador-total').innerText = total;
+            document.getElementById('contador-disponivel').innerText = disponiveis;
+            document.getElementById('contador-tratamento').innerText = emTratamento;
+            document.getElementById('contador-reservado').innerText = reservados;
+        }
+
+        function filtrarGatos(status, botaoElemento) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            botaoElemento.classList.add('active');
+            statusAtualFiltro = status;
+            processarFiltrosEExibicao();
+        }
+
+        function filtrarPorFaixaEtariaDropdown(selectElemento) {
+            faixaEtariaAtualFiltro = selectElemento.value;
+            processarFiltrosEExibicao();
+        }
+
+        function prepararEdicao(nomeGato) {
+            const gato = listaGatosCache.find(g => g.nome === nomeGato);
+            if (!gato) return;
+
+            document.getElementById('gato-id').value = gato.nome;
+            document.getElementById('nome').value = gato.nome;
+            document.getElementById('idade').value = gato.idade_aproximada;
+            document.getElementById('pelagem').value = gato.pelagem;
+            document.getElementById('sexo').value = gato.sexo;
+            document.getElementById('status').value = gato.status;
+            document.getElementById('foto').value = '';
+
+            document.getElementById('titulo-form').innerText = 'Editar Gatinho';
+            document.getElementById('btn-salvar').innerText = 'Atualizar Gatinho';
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function abrirModalSaude(nomeGato) {
+            const gato = listaGatosCache.find(g => g.nome === nomeGato);
+            if (!gato) return;
+
+            gatoEmEdicaoSaude = gato.nome;
+            document.getElementById('nome-gato-modal').innerText = `Gatinho: ${gato.nome}`;
+            
+            document.getElementById('saude-fiv-felv').value = gato.fiv_felv || 'Não testado';
+            document.getElementById('saude-castrado').checked = !!gato.castrado;
+            document.getElementById('saude-vermifugado').checked = !!gato.vermifugado;
+            document.getElementById('saude-despulgado').checked = !!gato.despulgado;
+            document.getElementById('saude-vacinado').checked = !!gato.vacinado;
+            document.getElementById('saude-obs').value = gato.observacoes_medicas || '';
+            
+            document.getElementById('saude-data-vermifugo-1').value = gato.data_vermifugo_1 || '';
+            document.getElementById('saude-data-vermifugo-2').value = gato.data_vermifugo_2 || '';
+
+            // Limpa campos de novo gasto
+            document.getElementById('novo-gasto-desc').value = '';
+            document.getElementById('novo-gasto-valor').value = '';
+
+            // Carregar os gastos do gatinho
+            await carregarGastosGato(gato.nome);
+
+            document.getElementById('modal-saude').style.display = 'flex';
+        }
+
+        async function carregarGastosGato(nomeGato) {
+            try {
+                const resposta = await fetch(`http://localhost:3000/gastos/${encodeURIComponent(nomeGato)}`);
+                const gastos = await resposta.json();
+                
+                const listaUl = document.getElementById('lista-gastos-modal');
+                listaUl.innerHTML = '';
+                
+                let total = 0;
+
+                if (gastos.length === 0) {
+                    listaUl.innerHTML = '<li style="color: var(--text-muted); text-align: center; padding: 10px; font-size: 11px;">Sem gastos registados.</li>';
+                } else {
+                    gastos.forEach(g => {
+                        total += parseFloat(g.valor);
+                        const li = document.createElement('li');
+                        li.className = 'gasto-item';
+                        li.innerHTML = `
+                            <span><strong>${g.descricao}</strong> - R$ ${parseFloat(g.valor).toFixed(2)}</span>
+                            <button type="button" onclick="excluirGasto(${g.id})" style="background: none; border: none; color: var(--danger); cursor: pointer; font-weight: bold; font-size: 12px; width: auto; padding: 0; box-shadow: none;">✕</button>
+                        `;
+                        listaUl.appendChild(li);
+                    });
+                }
+
+                document.getElementById('valor-total-gatos').innerText = `R$ ${total.toFixed(2)}`;
+            } catch (err) {
+                console.error("Erro ao carregar gastos:", err);
+            }
+        }
+
+        async function adicionarGasto() {
+            const descricao = document.getElementById('novo-gasto-desc').value.trim();
+            const valor = document.getElementById('novo-gasto-valor').value;
+
+            if (!descricao || !valor) {
+                alert('Preencha a descrição e o valor do gasto.');
+                return;
+            }
+
+            try {
+                const resposta = await fetch('http://localhost:3000/gastos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nome_gato: gatoEmEdicaoSaude,
+                        descricao,
+                        valor
+                    })
+                });
+
+                if (resposta.ok) {
+                    document.getElementById('novo-gasto-desc').value = '';
+                    document.getElementById('novo-gasto-valor').value = '';
+                    await carregarGastosGato(gatoEmEdicaoSaude);
+                } else {
+                    alert('Erro ao registar gasto.');
+                }
+            } catch (err) {
+                console.error("Erro ao adicionar gasto:", err);
+            }
+        }
+
+        async function excluirGasto(idGasto) {
+            try {
+                const resposta = await fetch(`http://localhost:3000/gastos/${idGasto}`, {
+                    method: 'DELETE'
+                });
+
+                if (resposta.ok) {
+                    await carregarGastosGato(gatoEmEdicaoSaude);
+                } else {
+                    alert('Erro ao excluir gasto.');
+                }
+            } catch (err) {
+                console.error("Erro ao excluir gasto:", err);
+            }
+        }
+
+        function fecharModalSaude() {
+            document.getElementById('modal-saude').style.display = 'none';
+            gatoEmEdicaoSaude = '';
+        }
+
+        async function salvarSaude() {
+            if (!gatoEmEdicaoSaude) return;
+
+            const gatoAtual = listaGatosCache.find(g => g.nome === gatoEmEdicaoSaude);
+            if (!gatoAtual) return;
+
+            const formData = new FormData();
+            formData.append('nome', gatoAtual.nome);
+            formData.append('idade_aproximada', gatoAtual.idade_aproximada);
+            formData.append('pelagem', gatoAtual.pelagem);
+            formData.append('sexo', gatoAtual.sexo);
+            formData.append('status', gatoAtual.status);
+            
+            formData.append('fiv_felv', document.getElementById('saude-fiv-felv').value);
+            formData.append('castrado', document.getElementById('saude-castrado').checked);
+            formData.append('vermifugado', document.getElementById('saude-vermifugado').checked);
+            formData.append('despulgado', document.getElementById('saude-despulgado').checked);
+            formData.append('vacinado', document.getElementById('saude-vacinado').checked);
+            formData.append('observacoes_medicas', document.getElementById('saude-obs').value);
+            
+            formData.append('data_vermifugo_1', document.getElementById('saude-data-vermifugo-1').value);
+            formData.append('data_vermifugo_2', document.getElementById('saude-data-vermifugo-2').value);
+
+            try {
+                const resposta = await fetch(`http://localhost:3000/gatos/${encodeURIComponent(gatoEmEdicaoSaude)}`, {
+                    method: 'PUT',
+                    body: formData
+                });
+
+                if (resposta.ok) {
+                    alert('Prontuário médico atualizado com sucesso!');
+                    fecharModalSaude();
+                    carregarGatos();
+                } else {
+                    alert('Erro ao atualizar a saúde do gatinho.');
+                }
+            } catch (erro) {
+                console.error("Erro na requisição:", erro);
+                alert('Erro de conexão com o servidor.');
+            }
+        }
+
+        async function excluirGato(nomeGato) {
+            if (!confirm(`Tens a certeza de que pretendes excluir o gatinho ${nomeGato}?`)) {
+                return;
+            }
+
+            try {
+                const resposta = await fetch(`http://localhost:3000/gatos/${encodeURIComponent(nomeGato)}`, {
+                    method: 'DELETE'
+                });
+
+                if (resposta.ok) {
+                    alert('Gatinho excluído com sucesso!');
+                    carregarGatos();
+                } else {
+                    alert('Erro ao excluir o gatinho.');
+                }
+            } catch (erro) {
+                console.error("Erro na requisição:", erro);
+                alert('Erro de conexão com o servidor.');
+            }
+        }
+
+        document.getElementById('form-gato').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const idOriginal = document.getElementById('gato-id').value;
+            const gatoAntigo = listaGatosCache.find(g => g.nome === idOriginal);
+
+            const formData = new FormData();
+            formData.append('nome', document.getElementById('nome').value);
+            formData.append('idade_aproximada', document.getElementById('idade').value);
+            formData.append('pelagem', document.getElementById('pelagem').value);
+            formData.append('sexo', document.getElementById('sexo').value);
+            formData.append('status', document.getElementById('status').value);
+            
+            const arquivoFoto = document.getElementById('foto').files[0];
+            if (arquivoFoto) {
+                formData.append('foto', arquivoFoto);
+            }
+
+            formData.append('fiv_felv', gatoAntigo && gatoAntigo.fiv_felv ? gatoAntigo.fiv_felv : 'Não testado');
+            formData.append('castrado', gatoAntigo ? gatoAntigo.castrado : false);
+            formData.append('vermifugado', gatoAntigo ? gatoAntigo.vermifugado : false);
+            formData.append('despulgado', gatoAntigo ? gatoAntigo.despulgado : false);
+            formData.append('vacinado', gatoAntigo ? gatoAntigo.vacinado : false);
+            formData.append('observacoes_medicas', gatoAntigo && gatoAntigo.observacoes_medicas ? gatoAntigo.observacoes_medicas : '');
+            
+            if (gatoAntigo && gatoAntigo.data_vermifugo_1) formData.append('data_vermifugo_1', gatoAntigo.data_vermifugo_1);
+            if (gatoAntigo && gatoAntigo.data_vermifugo_2) formData.append('data_vermifugo_2', gatoAntigo.data_vermifugo_2);
+
+            try {
+                let resposta;
+                if (idOriginal && idOriginal !== "") {
+                    resposta = await fetch(`http://localhost:3000/gatos/${encodeURIComponent(idOriginal)}`, {
+                        method: 'PUT',
+                        body: formData
+                    });
+                } else {
+                    resposta = await fetch('http://localhost:3000/gatos', {
+                        method: 'POST',
+                        body: formData
+                    });
+                }
+
+                if (resposta.ok) {
+                    alert(idOriginal ? 'Gatinho atualizado com sucesso!' : 'Gatinho cadastrado com sucesso!');
+                    document.getElementById('form-gato').reset();
+                    document.getElementById('gato-id').value = '';
+                    document.getElementById('titulo-form').innerText = 'Cadastrar Novo Gatinho';
+                    document.getElementById('btn-salvar').innerText = 'Salvar Gatinho';
+                    carregarGatos();
+                } else {
+                    alert('Erro ao salvar gatinho.');
+                }
+            } catch (erro) {
+                console.error("Erro na requisição:", erro);
+                alert('Erro de conexão com o servidor.');
+            }
+        });
+
+        carregarGatos();
+    </script>
+
+</body>
+</html>
